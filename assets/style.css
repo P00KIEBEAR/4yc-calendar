@@ -64,6 +64,9 @@ textarea {
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
   background-color: #06AED5;
+  background-image: url(images/save.jpg);
+  background-size: cover;
+  background-position: center;
   color: white;
   height: 100%;
   width: 100%;
