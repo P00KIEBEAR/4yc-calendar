@@ -7,13 +7,13 @@ currentDay.text(rightNow);
 var currentTime = moment().format("H");
 var container = $('#container');
 
-var appts = JSON.parse(localStorage.getItem('appt')) || []
-var ids = JSON.parse(localStorage.getItem('id')) || []
+var appts = JSON.parse(localStorage.getItem('appt')) || [];
+var ids = JSON.parse(localStorage.getItem('id')) || [];
 
-var result = {};
+var apptObj = {};
 
-ids.forEach((id, i) => result[id] = appts[i]);
-console.log(result);
+ids.forEach((id, i) => apptObj[id] = appts[i]);
+console.log(apptObj);
 
 //have time pass grey out
 //moment#isBefore('#8:00AAM'); // true
@@ -28,34 +28,32 @@ for (var i = 0; i < times.length; i++) {
   var col1 = $('<div>')
     .addClass('col-1 hour')
     .html(times[i])
-    .appendTo($(row))
+    .appendTo($(row));
+
   var col10 = $("<input>")
     .addClass('col-10 input' + i)
     .attr('id', i)
     .attr('name', i)
-    .attr('value', result[i])
+    .attr('value', apptObj[i])
     .attr('type', 'text')
-    .appendTo($(row))
+    .appendTo($(row));
 
   var btn = $('<button type="sumbit" >')
     .addClass('saveBtn btn' + i)
     .addClass('col-1')
-    .appendTo($(row))
     .attr('id', "btn" + i)
-    .attr('value', i);
+    .attr('value', i)
+    .appendTo($(row));
 
   if (currentTime > x) {
-    $(col10).addClass('past')
+    $(col10).addClass('past');
   }
   else if (currentTime < x) {
-    $(col10).addClass('future')
+    $(col10).addClass('future');
   }
   else {
-    $(col10).addClass('present')
+    $(col10).addClass('present');
   }
-
-
-
 }
 setInterval(function () {
   location.reload();
@@ -70,8 +68,8 @@ $("form").submit(function (event) {
   var appt = (x[0].value);
   ids.push(id);
   appts.push(appt);
-  localStorage.setItem('appt', JSON.stringify(appts))
-  localStorage.setItem('id', JSON.stringify(ids))
+  localStorage.setItem('appt', JSON.stringify(appts));
+  localStorage.setItem('id', JSON.stringify(ids));
 });
 /*
 console.log($(this).serializeArray());
