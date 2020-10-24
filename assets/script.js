@@ -1,29 +1,26 @@
-
+"use strict";
 
 //link momoent to page
 var currentDay = $("#currentDay");
 var rightNow = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
 currentDay.text(rightNow);
-var currentTime = moment().format("h a");
+var currentTime = moment().format("H");
 var container = $('#container');
-var input0 = localStorage.getItem('input0');
-var input1 = localStorage.getItem('input1');
-var input2 = localStorage.getItem('input2');
-var input3 = localStorage.getItem('input3');
-var input4 = localStorage.getItem('input4');
-var input5 = localStorage.getItem('input5');
-var input6 = localStorage.getItem('input6');
-var input7 = localStorage.getItem('input7');
-var input8 = localStorage.getItem('input8');
-var input9 = localStorage.getItem('input9');
+
+var appts = JSON.parse(localStorage.getItem('appt')) || []
+var ids = JSON.parse(localStorage.getItem('id')) || []
+
+var result = {};
+
+ids.forEach((id, i) => result[id] = appts[i]);
+console.log(result);
+
 //have time pass grey out
 //moment#isBefore('#8:00AAM'); // true
-
 var times = ['8 am', '9 am', '10 am', '11 am', '12 pm', '1 pm', '2 pm', '3 pm', '4 pm', '5 pm'];
-
-
-for (i = 0; i < times.length; i++) {
-
+;
+for (var i = 0; i < times.length; i++) {
+  var x = (8 + i)
   var row = $('<form>')
     .addClass('row')
     .appendTo($(container));
@@ -32,44 +29,52 @@ for (i = 0; i < times.length; i++) {
     .addClass('col-1 hour')
     .html(times[i])
     .appendTo($(row))
-  var col10 = $("<input >")
+  var col10 = $("<input>")
     .addClass('col-10 input' + i)
-    .attr('id', "input" + i)
-
+    .attr('id', i)
+    .attr('name', i)
+    .attr('value', result[i])
+    .attr('type', 'text')
     .appendTo($(row))
 
-  var btn = $('<button >')
+  var btn = $('<button type="sumbit" >')
     .addClass('saveBtn btn' + i)
     .addClass('col-1')
     .appendTo($(row))
     .attr('id', "btn" + i)
     .attr('value', i);
 
-
-
-  if (moment(times[i]).isAfter(currentTime)) {
-    $(col10).addClass("future");
+  if (currentTime > x) {
+    $(col10).addClass('past')
   }
-  else if (moment(times[i]).isBefore(currentTime)) {
-    $(col10).addClass("past");
+  else if (currentTime < x) {
+    $(col10).addClass('future')
   }
   else {
-    $(col10).addClass("present");
-  };
+    $(col10).addClass('present')
+  }
 
-  $('#input0').val(input0)
-  $('#input1').val(input1)
-  $('#input2').val(input2)
-  $('#input3').val(input3)
-  $('#input4').val(input4)
-  $('#input5').val(input5)
-  $('#input6').val(input6)
-  $('#input7').val(input7)
-  $('#input8').val(input8)
-  $('#input9').val(input9)
+
+
 }
+setInterval(function () {
+  location.reload();
+}, (1000 * 60) * 15);
+
 //link btn to input and save
 
+$("form").submit(function (event) {
+  event.preventDefault();
+  var x = $(this).serializeArray();
+  var id = (x[0].name);
+  var appt = (x[0].value);
+  ids.push(id);
+  appts.push(appt);
+  localStorage.setItem('appt', JSON.stringify(appts))
+  localStorage.setItem('id', JSON.stringify(ids))
+});
+/*
+console.log($(this).serializeArray());
 $('#btn0').on('click', function (event) {
   event.preventDefault();
   var input = $('#input0')
@@ -139,7 +144,7 @@ $('#btn9').on('click', function (event) {
     .val()
     .trim();
   localStorage.setItem('input9', input)
-})
+})*/
 /*
  if (time._i > times._i[i]) {
     $(col10).addClass('past')
@@ -162,10 +167,5 @@ else {
   $(col10).addClass("present");
 };
 
-setInterval(function () {
-  $("input").each(function (index, input) {
-    auditTask(hour);
-  });
-  //check upcoming due dates every 30 minutes
-}, (1000 * 60) * 30);
+
 */
