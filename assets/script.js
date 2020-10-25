@@ -2,19 +2,22 @@
 
 //link momoent to page
 var currentDay = $("#currentDay");
-var rightNow = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
-currentDay.text(rightNow);
+var update = function () {
+  var rightNow = moment().format("dddd, MMMM Do YYYY, h:mm:ss a");
+  currentDay.text(rightNow);
+};
+$(document).ready(function () {
+  currentDay = $('#currentDay')
+  update();
+  setInterval(update, 1000);
+});
 var currentTime = moment().format("H");
 var container = $('#container');
-
 var appts = JSON.parse(localStorage.getItem('appt')) || [];
 var ids = JSON.parse(localStorage.getItem('id')) || [];
 
 var apptObj = {};
-
 ids.forEach((id, i) => apptObj[id] = appts[i]);
-console.log(apptObj);
-
 //have time pass grey out
 //moment#isBefore('#8:00AAM'); // true
 var times = ['8 am', '9 am', '10 am', '11 am', '12 pm', '1 pm', '2 pm', '3 pm', '4 pm', '5 pm'];
@@ -55,12 +58,7 @@ for (var i = 0; i < times.length; i++) {
     $(col10).addClass('present');
   }
 }
-setInterval(function () {
-  location.reload();
-}, (1000 * 60) * 15);
-
 //link btn to input and save
-
 $("form").submit(function (event) {
   event.preventDefault();
   var x = $(this).serializeArray();
