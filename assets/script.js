@@ -61,6 +61,7 @@ for (var i = 0; i < times.length; i++) {
 //link btn to input and save
 $("form").submit(function (event) {
   event.preventDefault();
+  //I got this (.serializeArray()) from w3school web site
   var x = $(this).serializeArray();
   var id = (x[0].name);
   var appt = (x[0].value);
